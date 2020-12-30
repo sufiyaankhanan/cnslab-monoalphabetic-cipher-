@@ -1,0 +1,88 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+char
+key[26]={'g','h','i','j','k','l','m','n','o','p','q','r','s','t','u'
+,'v','w','x','y','z','a','b','c','d','e','f'};
+
+struct occurance
+{
+ char charecter;
+ int frequency;
+}plain[26],cipher[26];
+
+void analysis()
+{
+    int i,length=0,k=0;
+    char c;
+    int count=0;
+    FILE *fp1,*fp2;
+     int ch='a';
+     for(i=0;i<26;i++)
+     {
+         cipher[i].charecter=key[i];
+     }
+
+     for(i=0;i<26;i++)
+     {
+         count=0;
+         fp1=fopen("plain.txt","r");
+         while((c=fgetc(fp1))!=EOF)
+         {
+             if((int)c==ch)
+             count++;
+
+         }
+         plain[i].charecter=ch;
+         plain[i].frequency=count;
+         ch++;
+     }
+     length=ftell(fp1);
+    fclose(fp1);
+     //ch='a';
+     for(i=0;i<26;i++)
+     {
+         count=0;
+         fp2=fopen("cipher.txt","r");
+         while((c=fgetc(fp2))!=EOF)
+         {
+             if(c==cipher[k].charecter)
+                count++;
+
+         }
+         //cipher[i].charecter=ch;
+         cipher[i].frequency=count;
+         k++;
+
+     }
+    fclose(fp2);
+     printf("\nfrequency\t\tplain char\t\tcipher char\t\t\n");
+     for(i=0;i<26;i++)
+     {
+         if(plain[i].frequency!=0)
+            printf("%f\t\t\t\t%c\t\t\t%c\t\t\n",(float)plain[i].frequency/(length-1),plain[i].charecter,cipher[i].charecter);
+     }
+}
+
+int main()
+{
+    FILE *fp1,*fp2;
+    char c1,c2;
+    fp1=fopen("plain.txt","r");
+    fp2=fopen("cipher.txt","w");
+    //encrypt plain file and paste in cypher file
+    while((c1=fgetc(fp1))!=EOF)
+     {
+         if(isalpha(c1))
+         {
+             //element present at key[plain chararacter]
+            c2=key[tolower(c1)-'a'];
+         }
+         fputc(c2,fp2);
+     }
+    fclose(fp1);
+    fclose(fp2);
+    //print frequency
+    analysis();
+    return 0;
+}
